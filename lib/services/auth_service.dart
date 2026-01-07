@@ -121,49 +121,56 @@ class AuthService {
     }
   }
 
-  // Sign in with Google
+  // Sign in with Google - Méthode optimisée et robuste
   Future<UserModel?> signInWithGoogle() async {
     try {
-      // Méthode améliorée pour Google Sign-In
-      GoogleSignInAccount? googleUser;
+      // Méthode simplifiée et directe
+      // Étape 1: Demander la connexion Google
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       
-      // D'abord essayer signInSilently (si déjà connecté)
-      googleUser = await _googleSignIn.signInSilently();
-      
-      // Si pas de session existante, demander une nouvelle connexion
+      // Si l'utilisateur annule, retourner null
       if (googleUser == null) {
-        googleUser = await _googleSignIn.signIn();
-      }
-
-      if (googleUser == null) {
-        // L'utilisateur a annulé la connexion
         return null;
       }
 
+      // Étape 2: Obtenir les tokens d'authentification
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
 
-      // Vérifier que les tokens sont disponibles
+      // Étape 3: Vérifier les tokens (avec messages d'erreur clairs)
       if (googleAuth.accessToken == null) {
         throw Exception(
-          'Impossible d\'obtenir le token d\'accès Google.\n'
-          'Vérifiez votre connexion internet et réessayez.',
+          'Erreur: Token d\'accès Google manquant.\n\n'
+          'SOLUTIONS:\n'
+          '1. Vérifiez votre connexion internet\n'
+          '2. Réessayez dans quelques instants\n'
+          '3. Vérifiez que Google Sign-In est activé dans Firebase Console',
         );
       }
       
       if (googleAuth.idToken == null) {
         throw Exception(
-          'Impossible d\'obtenir le token ID Google.\n'
-          'Vérifiez que Google Sign-In est bien activé dans Firebase Console.\n'
-          'Assurez-vous que le SHA-1 est configuré dans Firebase Console.',
+          'Erreur: Token ID Google manquant.\n\n'
+          'SOLUTIONS CRITIQUES:\n'
+          '1. Ajoutez le SHA-1 dans Firebase Console:\n'
+          '   - Firebase Console > Project Settings > Your apps > Android app\n'
+          '   - Cliquez sur "Add fingerprint"\n'
+          '   - Collez votre SHA-1 (obtenez-le avec la commande ci-dessous)\n\n'
+          '2. Obtenir le SHA-1 (PowerShell):\n'
+          '   keytool -list -v -keystore "$env:USERPROFILE\\.android\\debug.keystore" -alias androiddebugkey -storepass android -keypass android\n\n'
+          '3. Vérifiez que google-services.json est dans android/app/\n'
+          '4. Attendez 5-10 minutes après avoir ajouté le SHA-1\n'
+          '5. Faites: flutter clean && flutter pub get && flutter run',
         );
       }
 
+      // Étape 4: Créer les credentials Firebase
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
+      // Étape 5: Se connecter avec Firebase
       final userCredential = await _auth.signInWithCredential(credential);
 
       if (userCredential.user != null) {
