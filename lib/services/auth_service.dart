@@ -157,7 +157,7 @@ class AuthService {
           '   - Cliquez sur "Add fingerprint"\n'
           '   - Collez votre SHA-1 (obtenez-le avec la commande ci-dessous)\n\n'
           '2. Obtenir le SHA-1 (PowerShell):\n'
-          '   keytool -list -v -keystore "$env:USERPROFILE\\.android\\debug.keystore" -alias androiddebugkey -storepass android -keypass android\n\n'
+          '   keytool -list -v -keystore "%USERPROFILE%\\.android\\debug.keystore" -alias androiddebugkey -storepass android -keypass android\n\n'
           '3. Vérifiez que google-services.json est dans android/app/\n'
           '4. Attendez 5-10 minutes après avoir ajouté le SHA-1\n'
           '5. Faites: flutter clean && flutter pub get && flutter run',
