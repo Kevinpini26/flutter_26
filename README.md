@@ -2,6 +2,19 @@
 
 Une application mobile moderne développée avec Flutter pour la gestion de produits avec authentification multi-providers et stockage Firestore.
 
+## 👥 Équipe de Développement
+
+Ce projet a été réalisé par :
+- **PINI MPANZA KEVIN**
+- **BUKASA SHIMATU JUNIOR**
+- **MUKENDI MULU JOEL**
+- **NGANDU KASHINDA FRANCK**
+- **LOLONGA EPANDA ROGER**
+
+## 📦 Dépôt GitHub
+
+Dépôt disponible sur : [https://github.com/Kevinpini26/flutter_26.git](https://github.com/Kevinpini26/flutter_26.git)
+
 ## 🚀 Fonctionnalités
 
 - **Authentification Multi-Providers**
